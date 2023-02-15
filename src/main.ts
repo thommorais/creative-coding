@@ -4,49 +4,38 @@ import canvasSketch from 'canvas-sketch'
 
 // Sketch parameters
 const settings = {
-	dimensions: [800, 800],
+	dimensions: [1080, 1080],
 	animate: true,
 }
 
 // Artwork function
 const sketch = ({ context, width, height }: any) => {
-	let x = 0
-	let y = 0
+	let x, y, w, h
+	return ({}: any) => {
+		context.fillStyle = 'white'
+		context.fillRect(0, 0, width, height)
 
-	context.fillStyle = 'white'
-	context.fillRect(0, 0, width, height)
+		x = width * 0.5
+		y = height * 0.5
+		w = width * 0.6
+		h = height * 0.1
 
-	return ({ frame }: any) => {
-		if (frame > 138) {
-			return
-		}
+		context.save()
+		context.translate(x, y)
+		context.translate(w * -0.5, h * -0.5)
 
-		x += 10
+		context.strokeStyle = 'blue'
+		// context.strokeRect(w * -0.5, h * -0.5, w, h)
 
-		if (x > 460) {
-			y += 240
-			x = 0
-		}
-
-		context.fillStyle = frame % 2 ? 'black' : 'white'
-		context.strokeStyle = context.fillStyle
-
-		// Set line width
-		context.lineWidth = 10
-
-		// Wall
-		context.strokeRect(x + 75, y + 140, 150, 110)
-
-		// Door
-		context.fillRect(x + 130, y + 190, 40, 60)
-
-		// Roof
 		context.beginPath()
-		context.moveTo(x + 50, y + 140)
-		context.lineTo(x + 150, y + 60)
-		context.lineTo(x + 250, y + 140)
+		context.moveTo(0, 0)
+		context.lineTo(w, 0)
+		context.lineTo(w, h)
+		context.lineTo(0, h)
 		context.closePath()
 		context.stroke()
+
+		context.restore()
 	}
 }
 
