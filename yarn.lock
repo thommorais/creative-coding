@@ -113,14 +113,10 @@
   integrity sha512-y+EHuSchhL7FjHgvQL/0fnnFmO4T1bhvWANX6gcnqTjtnKWbTvUMCpGnv2+t+31d7RzyEAYAd4u2fnIhHL6N/Q==
 
 "@types/canvas-sketch-util@npm:canvas-sketch-util-types", canvas-sketch-util-types@^0.5.1:
+  name "@types/canvas-sketch-util"
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/canvas-sketch-util-types/-/canvas-sketch-util-types-0.5.1.tgz#5491889909baad4710ef21218a7c6f08626be4b4"
   integrity sha512-AEyc+4XEd76cKVr0CH/U4bIDO+SDmW69dq+CNGtUgdmD7A99GepKQEYx6gC0ChryEXXRo148Yxf5WUs/eFoGSA==
-
-"@types/p5@^0.9.1":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@types/p5/-/p5-0.9.1.tgz#920c6cd6ee30b5d9e5cc04cb9b11bb762c333bc5"
-  integrity sha512-4glOKdqdBiRWDFZwi/MjHudPV2U4t2L4fTTSacGapfFxyNXzZcAshAjqmrJkCIZcFlhRBEAL7AM95xRDMfrIwg==
 
 abs-svg-path@^0.1.1:
   version "0.1.1"
@@ -162,13 +158,6 @@ call-bind@^1.0.2:
   dependencies:
     function-bind "^1.1.1"
     get-intrinsic "^1.0.2"
-
-canvas-sketch-types@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/canvas-sketch-types/-/canvas-sketch-types-1.1.2.tgz#6dd80007f80aeb83f4992b45725edcf69a449b98"
-  integrity sha512-ri+8CQ8/rNfDtipJOWiTGySgWZOzfS6XCV5mXv0mfmc7zPRI7b2wzBqgaYlNTxO1bBRw0qWuiT3w4oaRV9g1Eg==
-  dependencies:
-    "@types/p5" "^0.9.1"
 
 canvas-sketch-util@^1.10.0:
   version "1.10.0"

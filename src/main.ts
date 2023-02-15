@@ -1,6 +1,7 @@
 import './style.css'
 
 import canvasSketch from 'canvas-sketch'
+
 import { math, random, color } from 'canvas-sketch-util'
 import colors from 'riso-colors'
 
@@ -37,7 +38,13 @@ function generateValues(qnt: number, width: number, height: number) {
 	return values
 }
 
-// Artwork function
+/**
+ * @typedef SketchFuncProps
+ * @type {object}
+ * @property {CanvasRenderingContext2D} context - context of canvas.
+ * @property {number} width - width of canvas.
+ * @property {number} height - height of canvas.
+ */
 const sketch = ({ context, width, height }: any) => {
 	const values = generateValues(40, width, height)
 	const bgColor = random.pick(colors).hex
@@ -49,7 +56,7 @@ const sketch = ({ context, width, height }: any) => {
 		x: width * 0.5,
 	}
 
-	return ({}: any) => {
+	return (/** @type {SketchFuncProps} */ {}: any) => {
 		context.fillStyle = bgColor
 		context.fillRect(0, 0, width, height)
 
