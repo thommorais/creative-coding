@@ -1,12 +1,13 @@
 import './style.css'
 
-import './polyfill'
+import polyfill from './polyfill'
 
 import canvasSketch from 'canvas-sketch'
 
 import { math, random, color } from 'canvas-sketch-util'
 import colors from 'riso-colors'
 
+polyfill()
 // Sketch parameters
 const settings = {
 	dimensions: [1080, 1080],
