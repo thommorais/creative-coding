@@ -1,5 +1,7 @@
 import './style.css'
 
+import './polyfill'
+
 import canvasSketch from 'canvas-sketch'
 
 import { math, random, color } from 'canvas-sketch-util'
