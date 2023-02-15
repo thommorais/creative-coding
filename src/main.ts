@@ -8,7 +8,8 @@ import { random, math } from 'canvas-sketch-util'
 polyfill()
 // Sketch parameters
 const settings = {
-	dimensions: [1080, 1080],
+	dimensions: [window.innerWidth, window.innerWidth],
+	animate: true,
 }
 
 /**
@@ -19,13 +20,12 @@ const settings = {
  * @property {number} height - height of canvas.
  */
 const sketch = ({ context, width, height }: any) => {
-	const cols = 72
-	const rows = 8
+	const cols = 50
+	const rows = 10
 	const total = cols * rows
 
-	const gridWidth = width * 0.8
-	const gridHeight = height * 0.8
-
+	const gridWidth = width
+	const gridHeight = height
 	const cellWidth = gridWidth / cols
 	const cellHeight = gridHeight / rows
 
@@ -35,29 +35,29 @@ const sketch = ({ context, width, height }: any) => {
 	}
 
 	const amplitude = 90
-	const frequency = 0.002
+	const frequency = 0.009
 
 	const colors = colorMap({
-		colormap: 'salinity',
-		nshades: amplitude,
+		colormap: 'jet',
+		nshades: amplitude / 3,
 	})
 
-	const points = [] as { x: number; y: number; lineWidth: number; color: string | number[] }[]
+	const points = [] as { x: number; y: number; lineWidth: number; color: string | number[]; noise: number }[]
 
 	for (let i = 0; i < total; i++) {
 		const x = (i % cols) * cellWidth
 		const y = Math.floor(i / cols) * cellHeight
 
 		const noise = random.noise2D(x, y, frequency, amplitude)
-		const lineWidth = math.mapRange(noise, -amplitude, amplitude, 0, 5)
+		const lineWidth = math.mapRange(noise, -amplitude, amplitude, 0, 14)
 
 		const colorIndex = Math.floor(math.mapRange(noise, -amplitude, amplitude, 0, amplitude))
 		const color = colors[colorIndex]
 
-		points.push({ x: x + noise, y: y + noise, lineWidth, color })
+		points.push({ x: x + noise, y: y + noise, lineWidth, color, noise })
 	}
 
-	return (/** @type {SketchFuncProps} */ {}: any) => {
+	return (/** @type {SketchFuncProps} */ { frame }: any) => {
 		context.fillStyle = 'black'
 		context.fillRect(0, 0, width, height)
 
@@ -65,9 +65,10 @@ const sketch = ({ context, width, height }: any) => {
 		context.translate(margins.x, margins.y)
 		context.translate(cellWidth / 2, cellHeight / 2)
 
-		// draw lines
-		context.strokeStyle = 'red'
-		context.lineWidth = 4
+		const mutatedPoints = points.map((p) => {
+			const noise = random.noise2D(p.x, p.x + frame, frequency, amplitude)
+			return { ...p, x: p.x + noise, y: p.y + noise }
+		})
 
 		for (let r = 0; r < rows; r++) {
 			context.beginPath()
@@ -75,11 +76,11 @@ const sketch = ({ context, width, height }: any) => {
 			let lastX, lastY
 
 			for (let c = 0; c < cols - 1; c++) {
-				const curr = points[r * cols + c + 0]
-				const next = points[r * cols + c + 1]
+				const curr = mutatedPoints[r * cols + c + 0]
+				const next = mutatedPoints[r * cols + c + 1]
 
-				const mx = curr.x + (next.x - curr.x) * 0.8
-				const my = curr.y + (next.y - curr.y) * 5.5
+				const mx = curr.x + (next.x - curr.x) * 0.5
+				const my = curr.y + (next.y - curr.y) * 0.5
 
 				if (c === 0) {
 					lastX = curr.x
@@ -89,12 +90,12 @@ const sketch = ({ context, width, height }: any) => {
 				context.beginPath()
 				context.lineWidth = curr.lineWidth
 				context.strokeStyle = curr.color
-				context.moveTo(lastX, lastY)
+				context.moveTo(lastX ? lastX + 2 : 0, lastY ? lastY + 1 : 0)
 				context.quadraticCurveTo(curr.x, curr.y, mx, my)
 
 				context.stroke()
-				lastX = mx - (c / cols) * 250
-				lastY = my - (r / rows) * 250
+				lastX = mx
+				lastY = my
 			}
 			context.stroke()
 		}
