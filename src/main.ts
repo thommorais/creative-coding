@@ -1,7 +1,7 @@
 import './style.css'
 
 import canvasSketch from 'canvas-sketch'
-import { math } from 'canvas-sketch-util'
+import { math, random } from 'canvas-sketch-util'
 
 // Sketch parameters
 const settings = {
@@ -9,26 +9,35 @@ const settings = {
 	animate: true,
 }
 
+function generateValues(qnt: number, width: number, height: number) {
+	const values = [] as { x: number; y: number; w: number; h: number }[]
+
+	for (let i = 0; i < qnt; i++) {
+		const x = random.range(0, width)
+		const y = random.range(0, height)
+		const w = random.range(200, 600)
+		const h = random.range(40, 200)
+		values.push({ x, y, w, h })
+	}
+	return values
+}
+
 // Artwork function
 const sketch = ({ context, width, height }: any) => {
-	let x, y, w, h
+	const values = generateValues(20, width, height)
 	return ({}: any) => {
 		context.fillStyle = 'white'
 		context.fillRect(0, 0, width, height)
 
-		x = width * 0.5
-		y = height * 0.5
-		w = width * 0.6
-		h = height * 0.1
+		values.forEach(({ x, y, w, h }) => {
+			context.save()
+			context.strokeStyle = 'blue'
+			context.translate(x, y)
 
-		context.save()
-		context.translate(x, y)
-		context.strokeStyle = 'blue'
-
-		drawSkewedRect({ context, width: w, height: h, degrees: 30 })
-		context.stroke()
-
-		context.restore()
+			drawSkewedRect({ context, width: w, height: h, degrees: 30 })
+			context.stroke()
+			context.restore()
+		})
 	}
 }
 
