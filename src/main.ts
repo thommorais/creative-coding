@@ -1,6 +1,7 @@
 import './style.css'
 
 import canvasSketch from 'canvas-sketch'
+import { math } from 'canvas-sketch-util'
 
 // Sketch parameters
 const settings = {
@@ -22,21 +23,35 @@ const sketch = ({ context, width, height }: any) => {
 
 		context.save()
 		context.translate(x, y)
-		context.translate(w * -0.5, h * -0.5)
-
 		context.strokeStyle = 'blue'
-		// context.strokeRect(w * -0.5, h * -0.5, w, h)
 
-		context.beginPath()
-		context.moveTo(0, 0)
-		context.lineTo(w, 0)
-		context.lineTo(w, h)
-		context.lineTo(0, h)
-		context.closePath()
+		drawSkewedRect({ context, width: w, height: h, degrees: 30 })
 		context.stroke()
 
 		context.restore()
 	}
+}
+
+const drawSkewedRect = ({ context, width = 600, height = 200, degrees = -45 }: any) => {
+	const angle = math.degToRad(degrees)
+
+	const rx = Math.cos(angle) * width
+	const ry = Math.sin(angle) * width
+
+	context.save()
+	context.translate(rx * -0.5, (ry + height) * -0.5)
+
+	context.strokeStyle = 'blue'
+
+	context.beginPath()
+	context.moveTo(0, 0)
+	context.lineTo(rx, ry)
+	context.lineTo(rx, ry + height)
+	context.lineTo(0, height)
+	context.closePath()
+	context.stroke()
+
+	context.restore()
 }
 
 requestIdleCallback(() => {
